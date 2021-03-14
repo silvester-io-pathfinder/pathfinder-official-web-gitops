@@ -1,0 +1,6 @@
+apiVersion: v2
+name: pathfinder-official-web
+description: Web front end for pathfinder-official-api.
+type: application
+version: 0.0.1
+appVersion: "1.16.0"

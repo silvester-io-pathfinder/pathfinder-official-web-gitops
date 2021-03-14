@@ -1,0 +1,81 @@
+{{ if .Values.deployment.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: pathfinder
+  labels: 
+    apps: {{ .Chart.Name }}
+    release: {{ .Chart.Name }}
+spec:
+  selector: 
+    matchLabels:
+      app: {{ .Chart.Name }}
+  replicas: 1
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+      labels:
+        app: {{ .Chart.Name }}
+      annotations:
+        valuesChecksum: {{ .Values | toYaml | sha256sum | trunc 63 }}
+    spec:
+      imagePullSecrets:
+      - name: artifactory-credentials
+      containers:
+      - name: {{ .Chart.Name }}
+        image: silvester.jfrog.io/silvester-docker/pathfinder-official-web:{{ .Values.version }}
+        imagePullPolicy: Always
+
+        {{ if .Values.deployment.probes.liveness.enabled }}
+        livenessProbe:
+          initialDelaySeconds: {{ .Values.deployment.probes.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.deployment.probes.liveness.periodSeconds }}
+          timeoutSeconds: {{ .Values.deployment.probes.liveness.timeoutSeconds }}
+          successThreshold: {{ .Values.deployment.probes.liveness.successThreshold }}
+          failureThreshold: {{ .Values.deployment.probes.liveness.failureThreshold }}
+          httpGet: 
+            path: /probes/liveness
+            port: 80
+        {{- end }}
+        
+        {{ if .Values.deployment.probes.readiness.enabled }}
+        readinessProbe:
+          initialDelaySeconds: {{ .Values.deployment.probes.readiness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.deployment.probes.readiness.periodSeconds }}
+          timeoutSeconds: {{ .Values.deployment.probes.readiness.timeoutSeconds }}
+          successThreshold: {{ .Values.deployment.probes.readiness.successThreshold }}
+          failureThreshold: {{ .Values.deployment.probes.readiness.failureThreshold }}
+          httpGet: 
+            path: /probes/readiness
+            port: 80
+        {{- end }}
+        
+        ports:
+        - containerPort: 8081
+          name: http
+          protocol: TCP
+          
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 0.5m
+          limits:
+            memory: 256Mi
+            cpu: 1
+
+        volumeMounts:
+        {{- if .Values.deployment.appsettings }}
+        - name: appsettings-volume
+          mountPath: /app/appsettings.json
+          subPath: appsettings.json
+        {{- end }}        
+      volumes: 
+      {{ if .Values.deployment.appsettings }}
+      - name: appsettings-volume
+        configMap:
+          name: {{ .Chart.Name }}-configmap-appsettings
+          defaultMode: 0777
+      {{ end }}
+{{ end }}    
+    
