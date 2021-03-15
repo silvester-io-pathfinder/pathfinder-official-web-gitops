@@ -39,7 +39,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: /{{ $baseUrl}}/$1
+    nginx.ingress.kubernetes.io/rewrite-target: /{{ $basePath }}/$1
     nginx.ingress.kubernetes.io/ssl-redirect: {{ .Values.ingress.sslTermination | quote }}
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header x-forwarded-path {{ $basePath | quote }};
