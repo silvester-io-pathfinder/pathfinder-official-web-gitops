@@ -23,6 +23,11 @@ spec:
           serviceName: {{ .Chart.Name }}
           servicePort: 80
         path: /{{ $basePath }}(/|$)(.*)
+      - backend:
+          serviceName: {{ .Chart.Name }}
+          servicePort: 80
+        path: (/|$)(.*)
+                
   tls:
   - hosts:
     - {{ $url }}
