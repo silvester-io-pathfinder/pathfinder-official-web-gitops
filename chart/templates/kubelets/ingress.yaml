@@ -16,10 +16,10 @@ metadata:
       proxy_set_header x-forwarded-proto "https";
     nginx.ingress.kubernetes.io/server-snippet: |
       location = / {
-        return 301 /web;
+        return 301 /{{$basePath}};
       }
       location / {
-        try_files $uri $uri/ /index.html =404;
+        try_files $uri $uri/ /{{$basePath}}/index.html =404;
       }
 spec:
   rules:
