@@ -8,7 +8,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/app-root: /{{ $basePath }}
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/ssl-redirect: {{ .Values.ingress.sslTermination | quote }}
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header x-forwarded-path {{ $basePath | quote }};
@@ -22,7 +22,7 @@ spec:
       - backend:
           serviceName: {{ .Chart.Name }}
           servicePort: 80
-        path: /
+        path: /{{ $basePath }}(/|$)(.*)
   tls:
   - hosts:
     - {{ $url }}
