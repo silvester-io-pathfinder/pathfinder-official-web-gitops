@@ -18,7 +18,6 @@ metadata:
       location = / {  
         return 301 /web;
       }
-}
 spec:
   rules:
   - host: {{ $url }}
