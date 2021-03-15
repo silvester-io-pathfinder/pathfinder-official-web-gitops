@@ -46,7 +46,7 @@ metadata:
       proxy_set_header x-forwarded-proto "https";
     nginx.ingress.kubernetes.io/server-snippet: |
       location = / {
-        return /web
+        return 301 /web
       }
       
 spec:
