@@ -18,7 +18,7 @@ deployment:
       failureThreshold: 5
       
     readiness:
-      enabled: true
+      enabled: false
       initialDelaySeconds: 0
       periodSeconds: 5
       timeoutSeconds: 10
