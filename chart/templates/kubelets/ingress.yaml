@@ -14,7 +14,6 @@ metadata:
       proxy_set_header x-forwarded-path {{ $basePath | quote }};
       proxy_set_header x-forwarded-host {{ $url | quote }};
       proxy_set_header x-forwarded-proto "https";
-      try_files $uri $uri/ /index.html =404;
     nginx.ingress.kubernetes.io/server-snippet: |
       location = / {
         return 301 /{{$basePath}};
