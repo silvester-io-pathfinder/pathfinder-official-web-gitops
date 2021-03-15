@@ -18,6 +18,9 @@ metadata:
       location = / {
         return 301 /web;
       }
+      location / {
+        try_files $uri $uri/ /index.html =404;
+      }
 spec:
   rules:
   - host: {{ $url }}
