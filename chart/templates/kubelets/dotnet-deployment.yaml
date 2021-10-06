@@ -22,6 +22,7 @@ spec:
     spec:
       imagePullSecrets:
       - name: artifactory-credentials
+      
       initContainers: 
       - name: appsettings-compression
         image: silvester.jfrog.io/silvester-docker/file-compression:0.0.3
