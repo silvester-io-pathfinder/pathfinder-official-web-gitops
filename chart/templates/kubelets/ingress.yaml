@@ -3,7 +3,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ .Chart.Name }}-ingress
+  name: {{ .Chart.Name }}-ingress-{{ .Values.cluster }}
   namespace: pathfinder
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
@@ -12,7 +12,7 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: {{ .Values.ingress.sslTermination | quote }}
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header x-forwarded-path {{ $basePath | quote }};
-      proxy_set_header x-forwarded-host {{ $url | quote }};
+      proxy_set_header x-forwarded-host {{ .Values.ingress.host | quote }};
       proxy_set_header x-forwarded-proto "https";
     nginx.ingress.kubernetes.io/server-snippet: |
       location = / {
@@ -20,19 +20,19 @@ metadata:
       }
 spec:
   rules:
-  - host: {{ $url }}
+  - host: {{ .Values.ingress.host }}
     http:
       paths:
       - backend:
-          serviceName: {{ .Chart.Name }}
+          serviceName: {{ .Chart.Name }}-{{ .Values.cluster }}
           servicePort: 80
         path: /
       - backend:
-          serviceName: {{ .Chart.Name }}
+          serviceName: {{ .Chart.Name }}-{{ .Values.cluster }}
           servicePort: 80
         path: /{{ $basePath }}(/|$)(.*)
                 
   tls:
   - hosts:
-    - {{ $url }}
-    secretName: {{ .Chart.Name }}-tls
+    - {{ .Values.ingress.host }}
+    secretName: {{ .Chart.Name }}-tls-{{ .Values.cluster }}

@@ -1,1 +1,5 @@
 version: 0.0.51
+cluster: production
+
+ingress:
+  host: pf2e.io

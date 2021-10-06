@@ -1,0 +1,5 @@
+version: 0.0.51
+cluster: staging
+
+ingress:
+  host: staging.pf2e.io

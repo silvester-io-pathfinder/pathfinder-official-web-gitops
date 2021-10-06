@@ -2,21 +2,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}
+  name: {{ .Chart.Name }}-{{ .Values.cluster }}
   namespace: pathfinder
   labels: 
-    apps: {{ .Chart.Name }}
-    release: {{ .Chart.Name }}
+    apps: {{ .Chart.Name }}-{{ .Values.cluster }}
+    release: {{ .Chart.Name }}-{{ .Values.cluster }}
 spec:
   selector: 
     matchLabels:
-      app: {{ .Chart.Name }}
+      app: {{ .Chart.Name }}-{{ .Values.cluster }}
   replicas: 1
   template:
     metadata:
-      name: {{ .Chart.Name }}
+      name: {{ .Chart.Name }}-{{ .Values.cluster }}
       labels:
-        app: {{ .Chart.Name }}
+        app: {{ .Chart.Name }}-{{ .Values.cluster }}
       annotations:
         valuesChecksum: {{ .Values | toYaml | sha256sum | trunc 63 }}
     spec:
@@ -74,7 +74,7 @@ spec:
       {{ if .Values.deployment.appsettings }}
       - name: appsettings-volume
         configMap:
-          name: {{ .Chart.Name }}-configmap-appsettings
+          name: {{ .Chart.Name }}-configmap-appsettings-{{ .Values.cluster }}
           defaultMode: 0777
       {{ end }}
 {{ end }}    
