@@ -30,7 +30,7 @@ spec:
           mountPath: "/mnt/input"
         - name: appsettings-output-volume
           mountPath: "/mnt/output"
-        command: ["brotli", "-k -o -v /mnt/output/appsettings.json.br", "/mnt/input/appsettings.json", "&&", "gzip", "-k -o -v /mnt/output/appsettings.json.gz", "/mnt/input/appsettings.json"]
+        command: ["brotli -k -o -v /mnt/output/appsettings.json.br /mnt/input/appsettings.json && gzip -k -o -v /mnt/output/appsettings.json.gz /mnt/input/appsettings.json"]
 
       containers:
       - name: {{ .Chart.Name }}-{{ .Values.cluster }}
