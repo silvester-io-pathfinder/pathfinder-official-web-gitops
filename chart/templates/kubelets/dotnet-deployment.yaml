@@ -22,6 +22,18 @@ spec:
     spec:
       imagePullSecrets:
       - name: artifactory-credentials
+      initContainers: 
+      - name: appsettings-compression
+        image: silvester.jfrog.io/silvester-docker/file-compression:0.0.3
+        volumeMounts:
+        - name: appsettings-input-volume
+          mountPath: "/mnt/input"
+        - name: appsettings-output-volume
+          mountPath: "/mnt/output"
+        command: |
+          brotli -k -o -v /mnt/output/appsettings.json.br /mnt/input/appsettings.json
+          gzip -k -o -v /mnt/output/appsettings.json.gz /mnt/input/appsettings.json
+
       containers:
       - name: {{ .Chart.Name }}-{{ .Values.cluster }}
         image: silvester.jfrog.io/silvester-docker/pathfinder-reference-web:{{ .Values.version }}
@@ -66,16 +78,17 @@ spec:
 
         volumeMounts:
         {{- if .Values.deployment.appsettings }}
-        - name: appsettings-volume
-          mountPath: /usr/share/nginx/html/appsettings.json
-          subPath: appsettings.json
+        - name: appsettings-output-volume
+          mountPath: /usr/share/nginx/html
         {{- end }}        
       volumes: 
       {{ if .Values.deployment.appsettings }}
-      - name: appsettings-volume
+      - name: appsettings-input-volume
         configMap:
           name: {{ .Chart.Name }}-configmap-appsettings-{{ .Values.cluster }}
           defaultMode: 0777
+      - name: appsettings-output-volume
+        emptyDir: {}
       {{ end }}
 {{ end }}    
     
