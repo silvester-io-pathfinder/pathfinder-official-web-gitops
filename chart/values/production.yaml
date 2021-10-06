@@ -1,4 +1,3 @@
-version: 0.0.51
 cluster: production
 
 ingress:
@@ -7,4 +6,6 @@ ingress:
 deployment:
   appsettings:
     endpoints: 
-      api: "https://pf2e.io/api/graphql"
+      api: 
+        graphql: "https://pf2e.io/api/graphql"
+        rest: "https://pf2e.io/api/"

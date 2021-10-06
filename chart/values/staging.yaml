@@ -1,4 +1,3 @@
-version: 0.1.0
 cluster: staging
 
 ingress:
@@ -7,4 +6,6 @@ ingress:
 deployment:
   appsettings:
     endpoints: 
-      api: "https://staging.pf2e.io/api/graphql"
+      api: 
+        graphql: "https://staging.pf2e.io/api/graphql"
+        rest: "https://staging.pf2e.io/api/"
