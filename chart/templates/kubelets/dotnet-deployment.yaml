@@ -23,7 +23,7 @@ spec:
       imagePullSecrets:
       - name: artifactory-credentials
       containers:
-      - name: {{ .Chart.Name }}
+      - name: {{ .Chart.Name }}-{{ .Values.cluster }}
         image: silvester.jfrog.io/silvester-docker/pathfinder-official-web:{{ .Values.version }}
         imagePullPolicy: Always
 
