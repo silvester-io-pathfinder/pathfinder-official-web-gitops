@@ -29,8 +29,12 @@ spec:
         - name: appsettings-input-volume
           mountPath: "/mnt/input"
         - name: appsettings-output-volume
-          mountPath: "/mnt/output"
-        command: ["sh", "-c", "brotli -k -v -f -o /mnt/output/appsettings.json.br /mnt/input/appsettings.json && gzip -k -v -f -c /mnt/input/appsettings.json > /mnt/output/appsettings.json.gz"]
+          mountPath: "/mnt/output/plain"
+        - name: appsettings-br-output-volume
+          mountPath: "/mnt/output/br"
+        - name: appsettings-gz-output-volume
+          mountPath: "/mnt/output/gz"
+        command: ["sh", "-c", "brotli -k -v -f -o /mnt/output/br/appsettings.json.br /mnt/input/appsettings.json && gzip -k -v -f -c /mnt/input/appsettings.json > /mnt/output/gz/appsettings.json.gz"]
 
       containers:
       - name: {{ .Chart.Name }}-{{ .Values.cluster }}
@@ -76,8 +80,15 @@ spec:
 
         volumeMounts:
         {{- if .Values.deployment.appsettings }}
-        - name: appsettings-output-volume
-          mountPath: /usr/share/nginx/html
+        - name: appsettings-input-volume
+          mountPath: "/usr/share/nginx/html"
+          subPath: appsettings.json
+        - name: appsettings-br-output-volume
+          mountPath: "/usr/share/nginx/html"
+          subPath: appsettings.json.br
+        - name: appsettings-gz-output-volume
+          mountPath: "/usr/share/nginx/html"
+          subPath: appsettings.json.gz
         {{- end }}        
       volumes: 
       {{ if .Values.deployment.appsettings }}
@@ -86,6 +97,10 @@ spec:
           name: {{ .Chart.Name }}-configmap-appsettings-{{ .Values.cluster }}
           defaultMode: 0777
       - name: appsettings-output-volume
+        emptyDir: {}
+      - name: appsettings-br-output-volume
+        emptyDir: {}
+      - name: appsettings-gz-output-volume
         emptyDir: {}
       {{ end }}
 {{ end }}    
