@@ -28,8 +28,6 @@ spec:
         volumeMounts:
         - name: appsettings-input-volume
           mountPath: "/mnt/input"
-        - name: appsettings-output-volume
-          mountPath: "/mnt/output/plain"
         - name: appsettings-br-output-volume
           mountPath: "/mnt/output/br"
         - name: appsettings-gz-output-volume
@@ -81,13 +79,13 @@ spec:
         volumeMounts:
         {{- if .Values.deployment.appsettings }}
         - name: appsettings-input-volume
-          mountPath: "/usr/share/nginx/html"
+          mountPath: "/usr/share/nginx/html/appsettings.json"
           subPath: appsettings.json
         - name: appsettings-br-output-volume
-          mountPath: "/usr/share/nginx/html"
+          mountPath: "/usr/share/nginx/html/appsettings.json.br"
           subPath: appsettings.json.br
         - name: appsettings-gz-output-volume
-          mountPath: "/usr/share/nginx/html"
+          mountPath: "/usr/share/nginx/html/appsettings.json.gz"
           subPath: appsettings.json.gz
         {{- end }}        
       volumes: 
