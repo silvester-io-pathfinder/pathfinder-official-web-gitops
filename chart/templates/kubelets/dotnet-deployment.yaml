@@ -67,7 +67,7 @@ spec:
         volumeMounts:
         {{- if .Values.deployment.appsettings }}
         - name: appsettings-volume
-          mountPath: /app/appsettings.json
+          mountPath: /usr/share/nginx/html/appsettings.json
           subPath: appsettings.json
         {{- end }}        
       volumes: 

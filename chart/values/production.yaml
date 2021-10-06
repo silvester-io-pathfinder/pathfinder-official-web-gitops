@@ -3,3 +3,8 @@ cluster: production
 
 ingress:
   host: pf2e.io
+
+deployment:
+  appsettings:
+    endpoints: 
+      api: "https://pf2e.io/api/graphql"
