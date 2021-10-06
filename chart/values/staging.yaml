@@ -4,7 +4,7 @@ cluster: staging
 ingress:
   host: staging.pf2e.io
 
-  deployment:
+deployment:
   appsettings:
     endpoints: 
       api: "https://staging.pf2e.io/api/graphql"
